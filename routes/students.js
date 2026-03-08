@@ -2,12 +2,10 @@ const express = require('express');
 const router = express.Router();
 let students = require('../data/students');
 
-
 // GET all students
 router.get('/', (req, res) => {
     res.json(students);
 });
-
 
 // GET single student
 router.get('/:id', (req, res) => {
@@ -20,7 +18,6 @@ router.get('/:id', (req, res) => {
 
     res.json(student);
 });
-
 
 // ADD new student
 router.post('/', (req, res) => {
@@ -36,7 +33,6 @@ router.post('/', (req, res) => {
 
     res.status(201).json(newStudent);
 });
-
 
 // UPDATE student
 router.put('/:id', (req, res) => {
@@ -55,10 +51,14 @@ router.put('/:id', (req, res) => {
     res.json(student);
 });
 
-
 // DELETE student
 router.delete('/:id', (req, res) => {
     const id = parseInt(req.params.id);
+    const studentExists = students.find(s => s.id === id);
+
+    if (!studentExists) {
+        return res.status(404).json({ message: "Student not found" });
+    }
 
     students = students.filter(s => s.id !== id);
 
